@@ -1,23 +1,24 @@
-\documentclass{tufte-handout}
+\documentclass[twocolumn, prd]{revtex4}
 \usepackage{graphicx}
-\title{Putting  a Spark in Large Scale Astrophysical Computations}
-\author{Sudeep Das et al.}
-
 \begin{document}
-\maketitle
-\begin{marginfigure}
-\includegraphics[width=0.4\linewidth]{spark-logo}
-\includegraphics[width=\linewidth]{spark.png}
-\caption{Spark powers a stack of high-level tools including Shark for SQL, MLlib for machine learning, GraphX, and Spark Streaming. These frameworks  cab be seamlessly combined in the same application.}
-\end{marginfigure}
-
+\title{Putting  a Spark in Large Scale Astrophysical Computations}
+\author{Meng et al.}
 \begin{abstract}
-We  argue for an early adoption of the rapidly maturing  Apache Spark\sidenote{\url{http://spark.apache.org/}} engine based ecosystem for  big data computations in astrophysics, especially in the light of the LSST project.  Spark provides a unified framework for a large gamut of data analysis requirements in astrophysics. We motivate the adoption of Spark in astrophysics by describing several use cases. 
+We  argue for an early adoption of the rapidly maturing  Apache Spark {\url{http://spark.apache.org/}} engine based ecosystem for  big data computations in astrophysics, especially in the light of the LSST project.  Spark provides a unified framework for a large gamut of data analysis requirements in astrophysics. We motivate the adoption of Spark in astrophysics by describing several use cases. 
 \end{abstract}
+\maketitle
+\section{Introduction}
+
 \section{Map-reduce and Spark}
 Map-reduce was first introduced at Google (Google BigTable) and since has emerged as an open source project with a vibrant community. Hadoop is a fault tolerant distributed file system designed for large scale data storage and data analysis. Map-Reduce is a divide and conquer algorithm that is used to analyze large datasets that are stored in Hadoop as Hadoop Distributed File System (HDFS). There are several Astrophysical computations where the computation can be broken down into small pieces with each piece being carried put independent of others. Map-Reduce paradigm can be extremely useful to parallelize these computations. One of the drawback of using Hadoop is the large latency of disk I/O. The map-reduce running on Hadoop cluster reads and writes many intermediate files to disk which makes the distributed computation slower to execute. Spark attempt to alleviate this problem by performing Map-reduce jobs in memory.  The  in-memory map reduce help in avoiding the disk I/O latency while still distributing the computations using Map-Reduce approach.
 \section{Map-Reduce, hadoop vs. ground up MPI code}
 There are two advantages of Hadoop- having a fault tolerant distributed file system, and distributing the computation. One might think if we don't need HDFS for our work and we can simply write a MPI based parallel program to distribute the computation, then what good is Hadoop plus the associated ecosystem. It is true one can write a MPI based parallelization, but one of the main advantage of  Map-Reduce and Hadoop ecosystem is to be able to parallelize the computation with minimum amount of effort from user. The only job of the user is to express the computation in Map and Reduce framework, and Hadoop takes care of the rest. As a result, one write relatively straight forward program with quick development time and still be able to massively parallelize the job.
+\begin{figure}
+\includegraphics[width=0.4\linewidth]{spark-logo}
+\includegraphics[width=\linewidth]{spark.png}
+\caption{Spark powers a stack of high-level tools including Shark for SQL, MLlib for machine learning, GraphX, and Spark Streaming. These frameworks  cab be seamlessly combined in the same application.}
+\end{figure}
+
 
 
 \section{Types of Astrophysical Computations}
@@ -35,13 +36,31 @@ Spark runs on top of  HDFS and enables querying databases via the Catalyst/Shark
 \subsection{Finding Halos in Simulations and Halo Profile Calculation}
 Halos are found in N-body simulations typically using friends-of-friends or spherical overdensity algorithm. The simulation volume can be divided into several small chunks (with buffer regions) on which the clustering algorithm can be run. The clustering algorithm (FOF or SO) itself can be broken into Map and Reduce steps and distributed across large number of compute nodes. 
 
-Once the halos are found in the simulation, several halo specific statistics can be trivially Map-Reduced. E.g., concentration-mass calculationw where each cluster is individually fitted using NFW or other profile and concentration of each clusters are then averaged over mass and redshit. 
-
+Once the halos are found in the simulation, several halo specific statistics can be trivially Map-Reduced. E.g., concentration-mass calculation where each cluster is individually fitted using NFW or other profile and concentration of each clusters are then averaged over mass and redshift. 
+\begin{enumerate}
+\item Streaming/Real time analysis
+	\subitem SNe
+	\subitem  Near Earth Objects, GRBs, high velocity objects
+\item Archival Data Analysis 
+	\subitem  Objects detection 
+	\subitem Correlation 
+	\subitem Classification 
+	\subitem  Photo-z 
+	\subitem Light curve fitting 
+\item Graph based algorithms 
+\subitem Halo formation history, FoF - GraphX 
+\subitem membership info (galaxies in a cluster etc.)
+\item Simulation Data Analysis
+\subitem Clustering algo? FoF/K-means++
+\subitem Queries and relational analysis
+\item Map making (CMB) SGD 
+\item Dimensionality reduction
+\end{enumerate}
 
 \subsection{Finding Clusters from Survey data}
 Similar to finding halos in the simulations, one can also find clusters of galaxies in observed data.
 
 
 
-\section{Future Directions}
+%%\section{Future Directions}
 \end{document}
