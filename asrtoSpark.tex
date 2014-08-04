@@ -30,14 +30,28 @@ map-making, filtering, curve fitting, parameter estimation etc. on archival data
 \section{Where Spark Fits In}
 Spark runs on top of  HDFS and enables querying databases via the Catalyst/Shark/BlinkDB SQL interface. The Spark Streaming tool enables real time analysis on streaming data (transients, supernovae, moving objects). Distributed machine learning  on archival  data sets (object detection, classification, photometric redshifts, supernova light curve fitting, etc.) can be performed using  MLLib,  a machine learning library built on top of Spark. Powerful statistical data exploration at scale can be performed with SparkR - a package for the R statistical language that enables R-users to leverage Spark functionality interactively from within the R shell. Relational (graph structured) data analysis can be performed using GraphX tool built on top of Spark.  Another great advantage of Spark is its Python API - pyspark -- that lets the end user develop applications in Python  -- a language that has already become extremely popular in  the astrophysics community. 
 
-
-
-\section{Use Cases} 
-\subsection{Finding Halos in Simulations and Halo Profile Calculation}
+\section{Finding Halos in Simulations and Halo Profile Calculation}
 Halos are found in N-body simulations typically using friends-of-friends or spherical overdensity algorithm. The simulation volume can be divided into several small chunks (with buffer regions) on which the clustering algorithm can be run. The clustering algorithm (FOF or SO) itself can be broken into Map and Reduce steps and distributed across large number of compute nodes. 
 
 Once the halos are found in the simulation, several halo specific statistics can be trivially Map-Reduced. E.g., concentration-mass calculation where each cluster is individually fitted using NFW or other profile and concentration of each clusters are then averaged over mass and redshift. 
+
+\section{Halo Formation History}
+Halos are formed in a hierchical process of mass accretion and halo formation is an important area of research in Astronomy. In order to study halo formation, one usually trach the formation, evolution and merging of halos over the past epoch. The Spark graphical database (GraphX) can be useful to study the halo formation history by placing the parent-child information for each halo in a graph database, then query the information for later study. Typically clustering algorithm like FOF is used to identify halos in simulations, these algorithms find nearest neighbors for particles in the simulations. Using GraphX, one can arrange the particles in a bidirected graph, then find the clusters according to a user defined linking length or density threshold. 
+
+
+\section{Astrophysical Data Analysis}
+\subsection{Streaming/Real time Analysis}
+Other than working in batch mode (post processing), Spark is also well suited for computing in real time or online mode. This particular aspect of Spark is useful for detection of Near Earth Objects and type Ia Supernovae. Future surveys like Large Synoptic Survey Telescope (LSST) is designed to detect a large number of Near Earth Objects (Asteroids) , Gamma Ray Bursts and Supernovae explosion collectively called transients. Spark streaming is already well equipped to perform real time analysis on these transients. For example, as a supernovae explosion gets detected, the data can be streamed in real time and the explosion can be classified as Type Ia or not. The advantage of such real time SNIa classification is the followup observations can be directed immediately.  
+
+\subsection{Archival Data Analysis}
+A few examples of archival data analysis in Astrophysics involve calculating two point correlation function of galaxies and clusters, identifying galaxy types, and determining redshift information of the galaxies and lightcurve fitting of SNIa. The two (and higher) point correlation of galaxies can benefit significantly if the graph analysis component of Spark, namely GraphX is used. One does not have to write a involved code with tree structure from scratch to perform correlation function analysis. For classifying galaxies and photometrix redshift estimation, one can use the Map-Reduce approach to parallelize the calculation.
+
+ 
+
+
+
 \begin{enumerate}
+
 \item Streaming/Real time analysis
 	\subitem SNe
 	\subitem  Near Earth Objects, GRBs, high velocity objects
